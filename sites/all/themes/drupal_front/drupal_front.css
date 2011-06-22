@@ -1,0 +1,1412 @@
+/* $Id: zen.css,v 1.14.2.1 2009/02/13 07:46:04 johnalbin Exp $ */
+
+/*
+ * ZEN STYLES
+ *
+ * This is an example stylesheet. Sub-themes should NOT include the zen/zen.css
+ * file, but instead copy this CSS to their own stylesheets.
+ *
+ * In this stylesheet, we have included all of the classes and IDs from this
+ * theme's tpl.php files. We have also included many of the useful Drupal core
+ * styles to make it easier for theme developers to see them.
+ *
+ * Many of these styles are over-riding Drupal's core stylesheets, so if you
+ * remove a declaration from here, the styles may still not be what you want
+ * since Drupal's core stylesheets are still styling the element. See the
+ * drupal6-reference.css file for a list of all Drupal 5.x core styles.
+ *
+ * In addition to the style declarations in this file, other Drupal styles that
+ * you might want to override or augment are those for:
+ *
+ *   Book Navigation  See line 74  of Zen's drupal6-reference.css file
+ *   Forum            See line 197 of Zen's drupal6-reference.css file
+ *   Menus            See line 667 of Zen's drupal6-reference.css file
+ *   News Aggregator  See line 20  of Zen's drupal6-reference.css file
+ *   Polls            See line 287 of Zen's drupal6-reference.css file
+ *   Search           See line 320 of Zen's drupal6-reference.css file
+ *   User Profiles    See line 945 of Zen's drupal6-reference.css file
+ */
+ 
+	html.js fieldset.collapsible .fieldset-wrapper
+	{
+		overflow: hidden;
+	}
+
+	.time-save-button
+	{
+		margin: 1.2em 0 0 0;
+	}
+	
+	.form-textarea
+	{
+		font-size: 12px;
+	}
+	
+	.views-exposed-widget label
+	{
+		float: left;
+	}
+	 
+	#group_slidecontent_values div[id$="-field-slide-start-value-wrapper"],
+	#group_slidecontent_values div[id$="-field-slide-slut-value-wrapper"]
+	{
+		width:110px;
+	}
+
+	#group_slidecontent_values div[id$="-field-slide-slide-upload-wrapper"]
+	{
+		width:340px;
+	}
+ 	
+	.filefield-file a, .filefield-file a.active, .filefield-file a.link
+	{
+		font-weight: normal;
+	}
+
+	.node-form .form-text 
+	{
+	    display: block;
+	    width: auto;
+	}
+	
+	.filefield-icon, .filesize, .filemime
+	{
+		display: none;
+	}
+	
+	.filefield-element .widget-preview
+	{
+		max-width: none;
+		width: 240px;
+	}
+	
+	.filefield-element .widget-edit 
+	{
+		max-width: none;
+	}
+	
+	#edit-title-wrapper, #edit-field-sp-live-value-wrapper
+	{
+		background: #CAEBFF;
+		padding: 8px;
+		border: 1px solid #848484;
+		border-radius: 5px;
+	}
+	
+	#edit-field-sp-film-0-value-wrapper, #edit-field-sp-offset-0-value-wrapper
+	{
+		background: #EAF8FF;
+		padding: 8px;
+		border: 1px solid #848484;
+		border-radius: 5px;
+	}
+	
+	#edit-title-wrapper, #edit-field-sp-offset-0-value-wrapper, #edit-field-sp-film-0-value-wrapper, #edit-field-sp-live-value-wrapper
+	{
+		float: left;
+		margin-right: 20px;
+	}
+	
+	#edit-field-sp-live-value-wrapper
+	{
+		margin-right: 0;
+	}
+	
+	#edit-title-wrapper input
+	{
+		width: 340px;
+	}
+
+	#edit-field-sp-offset-0-value-wrapper input
+	{
+		width: 110px;
+	}
+
+	#edit-field-sp-film-0-value-wrapper input
+	{
+		width: 260px;
+	}
+
+	
+	#group-slidecontent-items
+	{
+		clear: both;	
+	}
+
+	#group_slidecontent_values .form-text
+	{
+		width: 110px;
+	}
+	
+	#group_slidecontent_values .description
+	{
+		display: none;
+	}
+
+	#group_slidecontent_values .form-item label
+	{
+		
+	}
+	
+	#group_slidecontent_values  .form-item
+	{
+		float: left;
+		padding-right: 20px;
+	}
+	
+	#group_slidecontent_values .content-multiple-remove-cell .form-item
+	{
+		float: none;
+		padding: 0;
+	}
+	
+	#group_slidecontent_values tr.even td, #group_slidecontent_values tr.odd td {
+    padding: 5px 0 5px 0;
+	}
+
+	#group_slidecontent_values .filefield-element .widget-edit .form-item {
+	    float: left;
+	    margin: 0;
+	}
+
+	#group_clipcontent_values .form-text
+	{
+		width: 110px;
+	}
+	
+	#group_clipcontent_values .description
+	{
+		display: none;
+	}
+
+	#group_clipcontent_values .form-item label
+	{
+		
+	}
+	
+	#group_clipcontent_values  .form-item
+	{
+		float: left;
+		padding-right: 20px;
+	}
+	
+	#group_clipcontent_values .content-multiple-remove-cell .form-item
+	{
+		float: none;
+		padding: 0;
+	}
+	
+	#group_clipcontent_values tr.even td, #group_clipcontent_values tr.odd td {
+     padding: 5px 0 5px 0;
+	}
+	
+	#group_clipcontent_values textarea {
+     height: 10px;
+     width: 250px;
+	}
+
+	legend
+	{
+		font-weight: bold;
+	}
+
+ 	.filefield-element 
+	{
+		margin: 0em;
+		white-space:normal;
+	}
+	
+	.filefield-element .widget-edit .form-item 
+	{
+		float:left;
+		margin:0 0 1em;
+	}
+	
+	.filefield-element .imagefield-preview {
+		min-height: 0;
+		min-width:100px;
+	}
+
+	#edit-menu-parent-hierarchical-select-selects-0 {
+		display:none;
+	}
+
+	dl 
+	{
+		background: #F3F3F3;
+	}
+	
+	dt 
+	{
+		margin: 0;
+		padding: 10px 10px 0px 10px;
+		font-size:14px;
+	}
+	
+	dd 
+	{
+		border-bottom: 10px solid #fff;
+		margin: 0;
+		padding: 5px 10px 10px 10px;
+	}
+
+  ul.secondary
+  {
+    background: none repeat scroll 0 0 #F3F3F3;
+    border-bottom: 1px solid #C0C0C0;
+    list-style: none outside none;
+    margin: 0;
+    padding: 10px 0 10px 5px;
+    white-space: nowrap;
+  }
+
+  ul.primary
+  {
+    margin: 0;
+    padding: 10px 0 10px 5px;
+    border-bottom: 1px solid #c0c0c0;
+    list-style: none;
+    white-space: nowrap;
+    background: #F3F3F3;
+    /*background: url(images/tab-secondary-bg.png) repeat-x left bottom;*/
+  }
+
+  ul.primary li, ul.secondary li
+  {
+    display: inline;
+    margin: 0 5px 0 0;
+    padding: 5px 0;
+    border-right: none;
+    list-style-type: none;
+  }
+
+  ul.primary li a, ul.secondary li a,
+  ul.primary li.active a,ul.secondary li.active a
+  {
+    display: inline;
+    height: 24px;
+    margin: 0;
+    padding: 5px 0;
+    border: 1px solid #c0c0c0;
+    text-decoration: none;
+    color: #777;
+    background: none;
+  }
+
+  ul.primary li a .tab, ul.secondary li a .tab
+  {
+    display: inline;
+    height: 18px; /* 24px (parent) - 6px (padding) */
+    margin: 0;
+    padding: 5px 8px;
+    line-height: 18px;
+    background: none;
+  }
+
+  ul.primary li a:hover
+  {
+    background: url(images/tab-secondary.png) repeat-x left bottom;
+    border: 1px solid #c0c0c0;
+  }
+  
+  ul.primary li a:hover .tab
+  {
+    background: none;
+
+  }
+  
+ul.secondary a.active {
+    border-bottom: 1px solid #C0C0C0;
+}  
+  
+ul.primary li.active a .tab, ul.primary li.active a:hover .tab,
+ul.secondary li.active a .tab, ul.secondary li.active a:hover .tab {
+	background: url(images/tab-secondary.png) repeat-x left top;
+	border: 0px solid #c0c0c0;
+}
+
+  ul.primary li a.active,
+  ul.primary li a.active:hover,
+  ul.secondary li a.active,
+  ul.secondary li a.active:hover
+  {
+    display: inline;
+    list-style-type: none;
+    margin: 0 5px 0 0;
+    padding: 5px 0;
+    border-color: #BBBBBB;
+  }
+
+
+
+
+	.view-node-overview .views-field-title 
+	{
+		width: 350px;
+	}
+	
+	.view-node-overview .views-field-changed 
+	{
+		width: 130px;
+	}	
+	
+	#navmargin 
+	{
+		height :10px;		
+	}
+
+	.navblock 
+	{
+		float:left;
+		width: 90px;
+		color: #777;	
+	}
+
+	.navblocktop
+	{
+		float:left;
+		width: 90px;
+		color: #777;	
+	}
+	
+	#header-blocks .navblocktop a
+	{
+		color: #777;
+		font-size: 1em;
+	}
+	
+	.navblock-18
+	{
+		width: 330px;
+	}
+	
+	.navtitle 
+	{
+		float:left;
+		width: 20px;
+	}
+	
+	.navtitler
+	{
+		float:right;
+		width: 20px;
+	}
+	
+	.fl
+	{
+		float:left;
+	}	
+	
+	.fr
+	{
+		float:right;
+	}	
+	
+	.ntw 
+	{
+		padding-bottom: 3px;
+		line-height: 1em;
+	}
+	
+	.topnavnlinks, .topnavnlinks a
+	{
+		padding: 2px 5px; 
+		font-size: 12px;
+		color: #fff;
+	}
+	
+	 .topnavwrapper
+	{
+		position: absolute; 
+		width: 100%;
+		top: 0px; 
+		left: 0px; 		
+	}
+	
+	.c1 
+	{
+		background: url(images/c1.gif) no-repeat;
+		height: 25px;
+		width: 25px;			
+	}
+	.c2 
+	{
+		background: url(images/c2.gif) no-repeat;
+		height: 25px;
+		width: 25px;			
+	}
+	.c3 
+	{
+		background: url(images/c3.gif) no-repeat;
+		height: 25px;
+		width: 25px;			
+	}
+	.c4 
+	{
+		background: url(images/c4.gif) no-repeat;
+		height: 25px;
+		width: 25px;			
+	}
+	
+	.up
+	{
+		background: url(images/mabamo.png) no-repeat center;
+		height: 20px;
+		width: 77px;
+	}
+	
+	.down
+	{
+		background: url(images/down.png) no-repeat center;
+		height: 20px;
+		cursor: pointer;
+	}
+	
+	.user 
+	{
+		background: url(images/user.png) no-repeat;
+	}
+	
+	.logout 
+	{
+		background: url(images/cross.png) no-repeat;
+	}
+	
+	.goback
+	{
+		background: url(images/bullet_go.png) no-repeat;
+	}
+	
+	.sitename 
+	{
+		background: url(images/monitor.png) no-repeat;
+	}
+	
+	.navtitle-11 
+	{
+		background: url(images/page_edit.png) no-repeat;
+	}
+	
+	.navtitle-10 
+	{
+		background: url(images/layout_content.png) no-repeat;
+	}
+	
+	.navtitle-17 
+	{
+		background: url(images/brick.png) no-repeat;
+	}
+	
+	.navtitle-18 
+	{
+		background: url(images/cog.png) no-repeat;
+	}
+	
+	.navtitle-20 
+	{
+		background: url(images/group.png) no-repeat;
+	}
+	
+	.navtitle-16 
+	{
+		background: url(images/chart_bar.png) no-repeat;
+	}
+	
+	#header-blocks ul.menu {
+		border:medium none;
+		list-style-image:none;
+		list-style-position:outside;
+		list-style-type:none;
+		text-align:left;
+		margin: 0;
+		padding: 0;
+	}
+
+	#header-blocks a 
+	{
+		color: #fff;
+		font-size: 0.75em;
+		text-decoration: none;
+		border-bottom: none;
+		font-weight: bold;
+	}
+
+	#header-blocks a.active 
+	{
+		color: #fff;
+		font-weight: bold;
+	}
+	
+	#header-blocks h2 
+	{
+		color: #777;
+		font-size: 1em;
+	}
+	
+	#header-blocks .block ul,#header-blocks .item-list ul {
+		margin:0em 0;
+		padding:0 0 0 0em;
+		text-align: center;
+	}
+	
+	#header-blocks li 
+	{
+		
+		border: 2px solid #363636;
+		display: -moz-inline-stack;
+		display: inline-block;
+		vertical-align: top;
+		padding: 6px 20px 8px 20px;
+		margin: 0px 5px 0px 5px;
+		zoom: 1;
+		*display: inline;		
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+		background: #000
+	}
+	
+	#header-blocks li:hover
+	{
+		border: 2px solid #525252;
+	}
+	
+	#block-menu-menu-main
+	{
+		margin: 5px 0;
+	}
+
+	#header-blocks .block-menu_block
+	{
+		width: 90px;
+		float: left;
+	}
+	#header-blocks #block-menu_block-4 
+	{
+		width: 310px;
+	}
+	#pagetop
+	{
+		width:1000px;
+		margin: 20px auto;
+	}
+	
+	.nbh 
+	{
+		color: #fff;
+		font-size: 1.25em;
+	}
+	.navbox
+	{
+		width:120px;
+		color: #656565;
+		float:left;		
+		padding: 0 10px;
+		font-size:  0.75em;
+	}
+	
+	.line
+	{
+		width: 1px;
+		float:left;
+		height: 170px;
+		background: url(images/line.jpg);
+		margin: 0px 15px;
+	}
+	
+	.topline
+	{
+		width: 1px;
+		float:left;
+		height: 10px;
+		margin: 0px 15px;
+	}
+	
+/** body **/
+  body
+  {
+    margin: 0;
+    padding: 0px;
+    background: #fff;
+  }
+  
+  .bd 
+  {
+  	background: #f3f3f3;
+  }
+  
+  #header-blocks a
+  {
+		font-weight: bold;
+  }
+  
+  #header-blocks
+  {
+  	margin: 0 auto;
+  	width: 1000px;
+  }
+  
+  #navtop 
+  {
+  	height: 28px;
+  	background: #f3f3f3 url(images/nav1.jpg) repeat-x;	
+  }
+
+  #navmiddle 
+  {
+  	padding: 10px 0 0 0;
+  	background: #f3f3f3 url(images/nav2.jpg) repeat-x;	
+  	/*line-height: .9em;*/
+  }
+
+  #navbottom 
+  {
+  	height: 2px;
+  	background: #f3f3f3 url(images/nav3.jpg) repeat-x;	
+  }
+
+  #page
+  {
+  	margin-top: 0px;
+  }
+
+  #page-inner
+  {
+  }
+
+/** header **/
+  #header
+  {
+  }
+
+  #header-inner
+  {
+  }
+
+  #logo-title /* Wrapper for logo, website name, and slogan */
+  {
+  }
+
+  #logo /* Wrapper for logo */
+  {
+    margin: 0 10px 0 0;
+    padding: 0;
+  }
+
+  #logo-image /* The actual logo image */
+  {
+  }
+
+  h1#site-name, div#site-name /* The name of the website */
+  {
+    margin: 0;
+    font-size: 2em;
+    line-height: 1.3em;
+  }
+
+  #site-name a:link,
+  #site-name a:visited
+  {
+    color: #000;
+    text-decoration: none;
+  }
+
+  #site-name a:hover
+  {
+    text-decoration: underline;
+  }
+
+  #site-slogan /* The slogan (or tagline) of a website */
+  {
+  }
+
+  #header-blocks /* Wrapper for any blocks placed in the header region */
+  {
+  }
+
+/** main (container for everything else) **/
+  #main
+  {
+  }
+
+  #main-inner
+  {
+  }
+
+/** content **/
+  #content
+  {
+  }
+
+  #content-inner
+  {
+  }
+
+  #mission /* The mission statement of the site (displayed on homepage) */
+  {
+  }
+
+  #content-top /* Wrapper for any blocks placed in the "content top" region */
+  {
+  }
+
+  #content-header /* Wrapper for breadcrumb, title, messages, tabs, and help */
+  {
+  }
+
+  .breadcrumb /* The path to the current page in the form of a list of links */
+  {
+    padding-bottom: 0; /* Undo system.css */
+  }
+
+  h1.title, /* The title of the page */
+  h2.title, /* Block title or the title of a piece of content when it is given in a list of content */
+  h3.title /* Comment title */
+  {
+    margin: 0;
+    border-bottom:1px dotted #353535;
+
+  }
+
+  div.messages /* Important messages (status, warning, and error) for the user */
+  {
+  	margin: 10px;
+  }
+
+  div.status /* Normal priority messages */
+  {
+  }
+
+  div.warning, tr.warning /* Medium priority messages */
+  {
+    /* border: 1px solid #f0c020; */ /* Drupal core uses: 1px solid #f0c020 */
+  }
+
+  div.error, tr.error /* High priority messages. See also the .error declaration below. */
+  {
+  }
+
+  div.tabs /* See also the tabs.css file. */
+  {
+  }
+
+  .help /* Help text on a page */
+  {
+    margin: 1em 0;
+    clear: both;
+  }
+
+  .more-help-link /* Link to more help */
+  {
+    font-size: 0.85em;
+    text-align: right;
+  }
+
+  #content-area /* Wrapper for the actual page content */
+  {
+  }
+
+  .pager /* A list of page numbers when more than 1 page of content is available */
+  {
+    clear: both;
+    margin: 1em 0;
+    text-align: center;
+  }
+
+  .pager a, .pager strong.pager-current
+  {
+    padding: 0.5em;
+  }
+
+  .feed-icons /* The links to the RSS or Atom feeds for the current list of content */
+  {
+    margin: 1em 0;
+  }
+
+  #content-bottom /* Wrapper for any blocks placed in the "content bottom" region */
+  {
+  }
+
+/** navbar **/
+  #navbar
+  {
+  }
+
+  #navbar-inner
+  {
+  }
+
+  #search-box /* Wrapper for the search form */
+  {
+  }
+
+  #edit-search-theme-form-1-wrapper label /* Label that says "Search this site:" */
+  {
+    display: none;
+  }
+
+  #primary /* Primary links */
+  {
+  }
+
+  #secondary /* Secondary links */
+  {
+  }
+
+/** sidebar-left **/
+  #sidebar-left
+  {
+  }
+
+  #sidebar-left-inner
+  {
+  }
+
+/** sidebar-right **/
+  #sidebar-right
+  {
+  }
+
+  #sidebar-right-inner
+  {
+  }
+
+/** footer **/
+  #footer
+  {
+  }
+
+  #footer-inner
+  {
+  }
+
+  #footer-message /* Wrapper for the footer message from Drupal's "Site information"
+                     and for any blocks placed in the footer region */
+  {
+  }
+
+/** closure **/
+  #closure-blocks /* Wrapper for any blocks placed in the closure region */
+  {
+  }
+
+/** Drupal nodes **/
+  .node /* Node wrapper */
+  {
+  }
+
+  .node-inner /* Additional wrapper for node */
+  {
+  }
+
+  .sticky /* A sticky node (displayed before others in a list) */
+  {
+  }
+
+  .node-unpublished /* Unpublished nodes */
+  {
+    /* background-color: #fff4f4; */ /* Drupal core uses a #fff4f4 background */
+  }
+
+  .node-unpublished div.unpublished, /* The word "Unpublished" displayed beneath the content. */
+  .comment-unpublished div.unpublished
+  {
+    height: 0;
+    overflow: visible;
+    color: #d8d8d8;
+    font-size: 75px;
+    line-height: 1;
+    font-family: Impact, "Arial Narrow", Helvetica, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    word-wrap: break-word; /* A very nice CSS3 property */
+  }
+
+  .node-mine /* A node created by the current user */
+  {
+  }
+
+  .node-teaser /* A node displayed as teaser */
+  {
+  }
+
+  /* All nodes are given a node-type-FOO class that describes the type of
+   * content that it is. If you create a new content type called
+   * "my-custom-type", it will receive a "node-type-my-custom-type" class.
+   */
+  .node-type-page /* Page content node */
+  {
+  }
+
+  .node-type-story /* Story content node */
+  {
+  }
+
+  .node h2.title /* Node title */
+  {
+  }
+
+  .marker /* "New" or "Updated" marker for content that is new or updated for the current user */
+  {
+    color: #c00;
+  }
+
+  .node .picture /* The picture of the node author */
+  {
+  }
+
+  .node.node-unpublished .picture,
+  .comment.comment-unpublished .picture
+  {
+    position: relative; /* Otherwise floated pictures will appear below the "Unpublished" text. */
+  }
+
+  .node .meta /* Wrapper for submitted and terms data */
+  {
+  }
+
+  .node .submitted /* The "posted by" information */
+  {
+  }
+
+  .node .terms /* Node terms (taxonomy) */
+  {
+  }
+
+  .node .content /* Node's content wrapper */
+  {
+  }
+
+  .node div.links /* Wrapper for node links */
+  {
+    margin: 1em 0;
+  }
+
+  ul.links /* Taxonomy links, node links, comment links */
+  {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul.links.inline
+  {
+    display: inline;
+  }
+
+  ul.links li
+  {
+    display: inline;
+    list-style-type: none;
+    padding: 0 0.5em;
+  }
+
+  .preview .node /* Preview of the content before submitting new or updated content */
+  {
+    /* background-color: #ffffea; */ /* Drupal core uses a #ffffea background */
+  }
+
+/** Drupal comments **/
+  #comments /* Wrapper for the list of comments and its title */
+  {
+    margin: 1em 0;
+  }
+
+  #comments-title /* Heading for the list of comments */
+  {
+  }
+
+  .comment /* Wrapper for a single comment */
+  {
+  }
+
+  .comment-inner /* Additional wrapper for a single comment */
+  {
+  }
+
+  .comment-preview /* Preview of the comment before submitting new or updated comment */
+  {
+  }
+
+  .comment.new /* A new comment since the user last viewed the page. */
+  {
+  }
+
+  .comment.odd /* An odd-numbered comment in the list of comments */
+  {
+  }
+
+  .comment.even /* An even-numbered comment in the list of comments */
+  {
+  }
+
+  .comment.first /* The first comment in the list of comments */
+  {
+  }
+
+  .comment.last /* The last comment in the list of comments */
+  {
+  }
+
+  .comment-unpublished /* Unpublished comments */
+  {
+    /* background-color: #fff4f4; */ /* Drupal core uses a #fff4f4 background */
+  }
+
+  .comment-unpublished div.unpublished /* The word "Unpublished" displayed beneath the content. See also the div.unpublished declaration in the node section above. */
+  {
+  }
+
+  .comment-published /* Published comments */
+  {
+  }
+
+  .comment-by-anon /* A comment created by an anonymous user */
+  {
+  }
+
+  .comment-by-author /* A comment created by the node's author */
+  {
+  }
+
+  .comment-mine /* A comment created by the current user */
+  {
+  }
+
+  .comment h3.title /* Comment title */
+  {
+  }
+
+  .new /* "New" marker for comments that are new for the current user */
+  {
+    color: #c00;
+  }
+
+  .comment .picture /* The picture of the comment author */
+  {
+  }
+
+  .comment .submitted /* The "posted by" information */
+  {
+  }
+
+  .comment .content /* Comment's content wrapper */
+  {
+  }
+
+  .comment .user-signature /* The user's signature */
+  {
+  }
+
+  .comment div.links /* Wrapper for comment links. See also the ul.links declaration in the node section above. */
+  {
+    margin: 1em 0;
+  }
+
+  .indented /* Nested comments are indented */
+  {
+    /* margin-left: 25px; */ /* Drupal core uses a 25px left margin */
+  }
+
+  .preview .comment /* Preview of the comment before submitting new or updated comment */
+  {
+    /* background-color: #ffffea; */ /* Drupal core uses a #ffffea background */
+  }
+
+/** Drupal blocks **/
+  .block /* Block wrapper */
+  {
+    margin-bottom: 1em;
+  }
+
+  .block.region-odd /* Zebra striping for each block in the region */
+  {
+  }
+
+  .block.region-even /* Zebra striping for each block in the region */
+  {
+  }
+
+  .block.odd /* Zebra striping independent of each region */
+  {
+  }
+
+  .block.even /* Zebra striping independent of each region */
+  {
+  }
+
+  .region-count-1 /* Incremental count for each block in the region */
+  {
+  }
+
+  .count-1 /* Incremental count independent of each region */
+  {
+  }
+
+  .block-inner /* Additional wrapper for block */
+  {
+  }
+
+  .block h2.title /* Block title */
+  {
+  }
+
+  .block .content /* Block's content wrapper */
+  {
+  }
+
+  #block-aggregator-category-1 /* Block for the latest news items in the first category */
+  {
+  }
+
+  #block-aggregator-feed-1 /* Block for the latest news items in the first feed */
+  {
+  }
+
+  #block-block-1 /* First administrator-defined block */
+  {
+  }
+
+  #block-blog-0 /* "Recent blog posts" block */
+  {
+  }
+
+  #block-book-0 /* "Book navigation" block for the current book's table of contents */
+  {
+  }
+
+  #block-comments-0 /* "Recent comments" block */
+  {
+  }
+
+  #block-forum-0 /* "Active forum topics" block */
+  {
+  }
+
+  #block-forum-1 /* "New forum topics" block */
+  {
+  }
+
+  #block-menu-2 /* "Primary links" block */
+  {
+  }
+
+  #block-node-0 /* "Syndicate" block for primary RSS feed */
+  {
+  }
+
+  #block-poll-0 /* "Most recent poll" block */
+  {
+  }
+
+  #block-profile-0 /* "Author information" block for the profile of the page's author */
+  {
+  }
+
+  #block-search-0 /* "Search form" block */
+  {
+  }
+
+  #block-statistics-0 /* "Popular content" block */
+  {
+  }
+
+  #block-user-0 /* "User login form" block */
+  {
+  }
+
+  #block-user-1 /* "Navigation" block for Drupal navigation menu */
+  {
+  }
+
+  #block-user-2 /* "Who's new" block for a list of the newest users */
+  {
+  }
+
+  #block-user-3 /* "Who's online" block for a list of the online users */
+  {
+  }
+
+/** Drupal boxes **/
+  /* Wrapper for Comment form, Comment viewing options, Menu admin, and
+   * Search results.
+   */
+  .box /* Wrapper for box */
+  {
+  }
+
+  .box-inner /* Additional wrapper for box */
+  {
+  }
+
+  .box h2.title /* Box title */
+  {
+  }
+
+  .box .content /* Box's content wrapper */
+  {
+  }
+
+/** Miscellaneous Drupal styles **/
+  .error /* Errors that are separate from div.messages status messages (see above.) */
+  {
+    /* color: #e55; */ /* Drupal core uses a #e55 background */
+  }
+
+  .warning /* Warnings that are separate from div.messages status messages (see above.) */
+  {
+    /* color: #e09010; */ /* Drupal core uses a #e09010 background */
+  }
+
+  .more-link /* Aggregator, blog, and forum more link */
+  {
+    text-align: right;
+  }
+
+  #user-login-form /* Drupal's default login form */
+  {
+    text-align: left;
+  }
+
+  tr.even /* Some tables have rows marked even or odd. */
+  {
+    background-color: #f3f3f3;  /* Drupal core uses a #eee background */
+    border-bottom: 2px solid #fff;
+  }
+
+  tr.odd
+  {
+    background-color: #f3f3f3;  /* Drupal core uses a #eee background */
+    border-bottom: 2px solid #fff;
+  }
+  
+  tr.even td, tr.odd td
+  {
+  	padding: 10px;	
+  	background-color: #f3f3f3;
+  }
+
+  li a.active /* The active item in a Drupal menu */
+  {
+    color: #000;
+  }
+
+
+/** Drupal forms **/
+  .form-item, /* Wrapper for a form element (or group of form elements) and its label */
+  .form-checkboxes,
+  .form-radios
+  {
+    margin: 1em 0;
+  }
+
+  .form-item input.error, /* Highlight the form elements that caused a form submission error */
+  .form-item textarea.error,
+  .form-item select.error
+  {
+    border: 2px solid #c00;
+  }
+
+  .form-item label /* The label for a form element */
+  {
+    display: block;
+    font-weight: bold;
+  }
+
+  .form-item label.option /* The label for a radio button or checkbox */
+  {
+    display: inline;
+    font-weight: normal;
+  }
+
+  .form-required /* The part of the label that indicates a required field */
+  {
+    color: #c00;
+  }
+
+  .form-item .description /* The descriptive help text (separate from the label) */
+  {
+    font-size: 0.85em;
+  }
+
+  .form-checkboxes .form-item, /* Pack groups of checkboxes and radio buttons closer together */
+  .form-radios .form-item
+  {
+    margin: 0.4em 0;
+  }
+
+  .form-submit /* The submit button */
+  {
+  	color: #0070B3;
+  }
+
+  .container-inline div, .container-inline label /* Inline labels and form divs */
+  {
+    display: inline;
+  }
+
+  .tips /* Tips for Drupal's input formats */
+  {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+  }
+
+/** OpenID **/
+  /* The default styling for the OpenID login link seems to assume Garland's
+   * styling of list items.
+   */
+  #user-login-form ul /* OpenID creates a new ul above the login form's links. */
+  {
+    margin-bottom: 0; /* Position OpenID's ul next to the rest of the links. */
+  }
+
+  #user-login-form li.openid-link, /* The "Log in using OpenID" links. */
+  #user-login li.openid-link
+  {
+    margin-top: 1em;
+    margin-left: -20px; /* Un-do some of the padding on the ul list. */
+  	padding-left: 20px;
+  	background-position: left center;
+  }
+
+  #user-login-form li.user-link, /* The "Cancel OpenID login" links. */
+  #user-login li.user-link
+  {
+    margin-top: 1em;
+  	list-style-type: disc;
+  	list-style-position: outside;
+  }
+
+  #user-login li.openid-link, /* The OpenID links on the /user form. */
+  #user-login li.user-link
+  {
+    margin-left: -2em; /* Un-do all of the padding on the ul list. */
+  }
+
+/** Drupal admin tables **/
+  /* We overrode these styles in html-elements.css, but restore them for the
+   * forms on the site.
+   */
+  form tbody
+  {
+    border-top: 1px solid #ccc;
+  }
+
+  form th
+  {
+    text-align: left;
+    padding-right: 1em;
+    border-bottom: 3px solid #ccc;
+  }
+
+  form tbody th
+  {
+    border-bottom: 1px solid #ccc;
+  }
+
+  form thead th
+  {
+    text-align: left;
+    padding-right: 1em;
+    border-bottom: 3px solid #ccc;
+  }

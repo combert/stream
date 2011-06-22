@@ -1,0 +1,4 @@
+; $Id$
+name = Custom Form Overrides
+description = Adding some custom form overrides.
+core = 6.x

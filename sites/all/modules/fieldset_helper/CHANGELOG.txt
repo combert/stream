@@ -1,0 +1,85 @@
+
+Fieldset helper 6.x-2.0-dev, 2010-10-18
+---------------------------------------
+
+2011-01-16 - by jrockowitz: Added "Disable server-side state management for anonymous users".
+
+2010-10-25 - by jrockowitz: Added "Minimum number of collapsible fieldsets to show 'Expand all | Collapse all' links".
+
+2010-10-25 - by jrockowitz: Cookies setting doesn't work for static HTML fieldsets.
+- http://drupal.org/node/947684
+
+2010-10-21 - by jrockowitz: Changed HOOK_fieldset_helper_element_id_alter(&$id) to HOOK_fieldset_alter(&$element).
+
+2010-10-21 - by jrockowitz: Added 'Expand all | Collapse all' links on specified pages. Removed toggle all fieldset block.
+
+2010-10-20 - by jrockowitz: Fixed issue with Rubik and Tao admin themes.
+
+2010-10-20 - by jrockowitz: Automatically load required javascript files if a page has a collapsible fieldset.
+
+2010-10-19 - by jrockowitz: Added hook_fieldset_helper_element_id_alter(&$id).
+
+2010-10-19 - by jrockowitz: Re-worked fieldset setting to enable collapsible fieldset and collapsed by default so that it can be controlled on a per page basis.
+
+2010-10-19 - by jrockowitz: Added settings to save fieldset state for node add (node/add/*) and node edit (node/*/edit) as one page (node/form).
+
+2010-10-18 - by jrockowitz: Added hook_fieldset_helper_path_alter(&$path) and hook_fieldset_helper_element_path_alter($element_id, &$path).
+- http://groups.drupal.org/node/20014#comment-283124
+
+2010-10-18 - by jrockowitz: Added the ability to save a fieldsets state across multiple pages based on a fieldset id (ie fieldset-cck-*).
+- http://groups.drupal.org/node/20014#comment-283124
+
+2010-10-18 - by jrockowitz: Added the ability to save a fieldsets state across multiple pages based on a path pattern (ie node/*/edit).
+- http://groups.drupal.org/node/20014#comment-283124
+
+2010-10-18 - by jrockowitz: Added force all fieldset to collapsible and/or collapsed (by default) settings.
+- http://groups.drupal.org/node/20014#comment-283124
+
+2010-10-18 - by jrockowitz: Added toggle all block.
+- http://groups.drupal.org/node/20014#comment-283124
+
+2010-10-18 - by jrockowitz: Added hook_requirements warning about imcompatibility with rubik theme.
+- Adjusted custom theme preprocess functions to only hijack theme function and not theme templates.
+
+2010-10-18 - by jrockowitz: Added id to all fieldsets and improved theme preprocess handling.
+- Added an id attribute to all fieldsets. [#899768]
+- Included fieldset.js and fieldset_helper.js on all pages. [#628322]
+- Moved load fieldset_helper_add_js() to hook_init().
+- Add section comment blocks.
+- Removed 'fieldset_helper_auto_exclude' variable to allow all fieldsets to have ids
+- Setup custom theme preprocess functions and remove phptemplate_* functions.
+
+2010-10-18 - by jrockowitz: Setup new 6.x-2.0-dev branch.
+
+
+Fieldset helper 6.x-1.0, xxxx-xx-xx
+-----------------------------------
+
+2009-21-11 - by jrockowitz: Reviewed and cleaned up API documentation.
+
+xxxx-xx-xx - by jrockowitz: Fixed error in fieldset_helper.test with getInfo missing 'public static' scope.
+
+xxxx-xx-xx - by jrockowitz: Added SimpleTest and fixed and/or cleaned-up discovered issues.
+- Added optional DOM id param for theme_fieldset_helper_toggle_all($selector, $id);
+- Added _fieldset_helper_format_id($text) so that form_alter and theme_fieldset
+  share the same format.
+- Added fieldset_helper_state_manager_clear_lookup_ids() to purge existing ids;
+- Added 'Clear lookup id' to admin settings form.
+- Added $clear param to fieldset_helper_state_manager_get_cookie_states() for testing purposes.
+
+xxxx-xx-xx - by jrockowitz: Fix: 'Warning: Call-time pass-by-reference has been deprecated
+  in fieldset_helper.module on line 155
+
+xxxx-xx-xx - by jrockowitz: Minor pre-port code tweaks for Drupal 7 and fix form alter fieldset ids to be valid DOM #id.
+- Fix '[error] PHP Notice: Undefined index:' by checking for array's index of
+  property existance using isset(array['item']).
+- JavaScript should be compatible with other libraries than jQuery.
+  http://drupal.org/node/224333#javascript_compatibility
+
+xxxx-xx-xx - #425248 by HoKe: Un-/collapse by levels for moduleinfo.module
+-  Updated expand and collapse all on modules page to only open first level for fieldsets.
+-  Tweaked Drupal.FieldsetHelper.toggleFieldsets to allow for a completely custom jQuery selector.
+
+xxxx-xx-xx - by jrockowitz: Changed fieldset_helper.info file's package from 'Custom' to 'Other'.
+
+xxxx-xx-xx - by jrockowitz: Initial commit of fieldset_helper module.

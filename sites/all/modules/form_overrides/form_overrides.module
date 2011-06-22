@@ -1,0 +1,41 @@
+<?php
+/**
+*  Implementation of hook_form_alter().
+*/
+function form_overrides_form_alter(&$form, $form_state, $form_id) {
+	//dsm($form_id);
+  switch($form_id) {
+			case 'slideplayer_node_form':
+					// call javascript file after form has been build
+					$form['just_some_element']['#after_build'] = array('_load_my_javascript');
+					//dsm($form);
+			break;		
+/*			case 'comment_form_xxx':
+				//dsm($form);
+				//$form['comment_filter']['format']['#type'] = 'hidden';
+				//$form['body_field']['teaser_include']['#type'] = 'hidden';
+				//$form['buttons']['preview']['#type'] = 'hidden';
+			break;
+			case 'event_node_form_xxx':
+					//dsm($form);
+					$form['body_field']['teaser_include']['#type'] = 'hidden';
+					$form['buttons']['preview']['#type'] = 'hidden';
+			break;			
+			case 'video_node_form_xxx':
+					$form['menu']['#type'] = 'hidden';
+					//$form['body_field']['format']['#type'] = 'hidden';
+					$form['body_field']['teaser_include']['#type'] = 'hidden';
+					$form['buttons']['preview']['#type'] = 'hidden';
+					//print_r($form);
+			break;		
+*/
+  }
+}
+
+function _load_my_javascript(){
+		// add module javascript file
+    drupal_add_js(drupal_get_path('module', 'form_overrides') . '/form_overrides.js');
+}
+
+
+?>

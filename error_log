@@ -1,0 +1,2 @@
+[26-May-2011 22:33:27] PHP Fatal error:  Function name must be a string in /home/tfcdk/public_html/mabamo.dk/includes/form.inc on line 937
+[26-May-2011 22:33:41] PHP Fatal error:  Call to undefined function _load_my_javascript()() in /home/tfcdk/public_html/mabamo.dk/includes/form.inc on line 937

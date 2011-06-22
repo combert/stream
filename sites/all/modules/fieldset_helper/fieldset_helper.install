@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Installation information for the 'Fieldset helper' module.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function fieldset_helper_install() {
+  // Define variables
+  variable_set('fieldset_helper_node_form_state', 1);
+  variable_set('fieldset_helper_default_collapsible_pages', '*');
+  variable_set('fieldset_helper_default_collapsed_pages', 'admin/build/modules');
+  variable_set('fieldset_helper_toggle_all_pages', 'admin/build/modules
+admin/build/modules/list');
+  variable_set('fieldset_helper_toggle_all_minimum', 2);
+  variable_set('fieldset_helper_global_pages', '');
+  variable_set('fieldset_helper_global_ids', '');
+  variable_set('fieldset_helper_cookie_duration', 0);
+  variable_set('fieldset_helper_disable_state_anonymous', 0);
+
+  // Set the weight to 1000. This module needs to be called after all other modules
+  // have executed their hook_form_alter() functions.
+  db_query("UPDATE {system} SET weight = 1000 WHERE name = 'fieldset_helper'");
+
+  drupal_install_schema('fieldset_helper');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function fieldset_helper_uninstall() {
+  // Delete all the fieldset_helper variables and then clear the variable cache
+  db_query("DELETE FROM {variable} WHERE name LIKE 'fieldset_helper_%'");
+  cache_clear_all('variables', 'cache');
+
+  drupal_uninstall_schema('fieldset_helper');
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Updates
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Remove 'fieldset_helper_auto_exclude' variable.
+ */
+function fieldset_helper_update_6200(&$sandbox) {
+  // All fieldsets are now always assigned an ID,
+  // so the auto exclude variable is no longer applicable.
+  variable_del('fieldset_helper_auto_exclude');
+
+  fieldset_helper_state_manager_clear_lookup_ids();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Database schema
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implementation of hook_schema().
+ */
+function fieldset_helper_schema() {
+  // Learn more at http://api.drupal.org/api/function/hook_schema
+  return array(
+    'fieldset_helper_state_manager' => array(
+      'description' => t("Table to save a short numeric lookup id for a DOM element"),
+      'fields' => array(
+        'id' => array(
+          'description' => 'The unique id',
+          'type' => 'serial', // auto increment
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'path' => array(
+          'description' => "A drupal path",
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ),
+        'element_id' => array(
+          'description' => "The unique DOM element id.",
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ),
+      ),
+      'primary key' => array('id'),
+      'indexes' => array(
+        'path' => array('path'),
+      )
+    ),
+  );
+}

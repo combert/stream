@@ -1,0 +1,11 @@
+; $Id: save_edit.info,v 1.1.2.2 2009/06/23 12:30:41 himerus Exp $
+name = Save & Edit
+description = Gives a "<a href="http://drupal.org/project/save_edit">Save & Edit</a>" button on node pages. No Kittens were harmed during the creation of this module.
+package = Administration
+core = 6.x
+; Information added by drupal.org packaging script on 2010-12-10
+version = "6.x-1.6"
+core = "6.x"
+project = "save_edit"
+datestamp = "1292014539"
+

@@ -1,0 +1,153 @@
+/*
+			case 'simplenews_confirm_add_form':
+				$form['actions']['cancel']['#value'] = '<br/><br/>' . str_replace("Annuller", "Fortryd", $form['actions']['cancel']['#value']);
+				$form['question']['#value'] = '<h1 class="title">Bekr&aelig;ftelse</h1>' . $form['question']['#value'];
+				break;
+
+  		case 'simplenews_node_form':
+  			$form['body_field']['#type']= 'hidden';
+  			$form['revision_information']['#type'] = 'hidden';
+  			//$form['author']['#type'] = 'hidden';
+  			$form['comment_settings']['#type'] = 'hidden';
+  			$form['simplenews']['#weight'] = 50;
+  			$form['group_news1']['#weight'] = 41;
+  			$form['group_news2']['#weight'] = 42;
+  			$form['group_news3']['#weight'] = 43;
+  			$form['group_news4']['#weight'] = 44;
+  			$form['group_news5']['#weight'] = 45;
+  			$form['buttons']['preview']['#type'] = 'hidden';
+  			break;
+  
+  		case 'oversigt_node_form':
+  			//$form['body_field']['#type'] = 'hidden'; 
+  			$form['revision_information']['#type'] = 'hidden'; 
+  			$form['comment_settings']['#type'] = 'hidden'; 
+  			$form['author']['#type'] = 'hidden'; 
+  			$form['path']['#collapsed'] = TRUE; 
+  			$form['menu']['#collapsed'] = FALSE; 
+  			$form['buttons']['preview']['#type'] = 'hidden';
+  			break;
+
+  		case 'oversigtsliste_node_form':
+  			//$form['body_field']['#type'] = 'hidden'; 
+  			$form['revision_information']['#type'] = 'hidden'; 
+  			$form['comment_settings']['#type'] = 'hidden'; 
+  			$form['author']['#type'] = 'hidden'; 
+  			$form['path']['#collapsed'] = TRUE; 
+  			$form['menu']['#collapsed'] = FALSE; 
+  			$form['buttons']['preview']['#type'] = 'hidden';
+  			break;
+  			
+  		case 'tekst_artikel_node_form':
+  			//$form['body_field']['#type'] = 'hidden'; 
+  			$form['revision_information']['#type'] = 'hidden'; 
+  			$form['comment_settings']['#type'] = 'hidden'; 
+  			$form['author']['#type'] = 'hidden'; 
+  			$form['path']['#collapsed'] = TRUE; 
+  			$form['menu']['#collapsed'] = FALSE; 
+  			$form['buttons']['preview']['#type'] = 'hidden';
+  			$form['group_show_in_menu']['field_show_in_menu']['#default_value']['0']['value'] = 0;
+  			break;
+  			  			
+  		case 'forsideboks_node_form':
+  			$form['body_field'] = array('#type' => 'hidden');
+  			$form['revision_information'] = array('#type' => 'hidden');
+  			$form['comment_settings'] = array('#type' => 'hidden');
+  			$form['path']['#collapsed'] = TRUE;  
+  			$form['path']['#type'] = 'hidden';		
+  			$form['menu'] = array('#type' => 'hidden');
+  			$form['author'] = array('#type' => 'hidden');
+  			$form['options']['promote']['#type'] = 'hidden';
+  			$form['options']['sticky']['#type'] = 'hidden';
+  			$form['options']['#collapsed'] = FALSE;
+  			$form['buttons']['preview']['#type'] = 'hidden';
+  			 break;
+  			 
+      case 'artikel_node_form':
+      	$form['buttons']['preview']['#type'] = 'hidden';
+				$form['#cache'] = TRUE; 
+			  $form['group_right_column']['group_billede1'] = array(
+			    '#type' => 'fieldset',
+			    '#title' => t('Billede/tekst 1'),
+			    '#weight' => 1,
+			    '#collapsible' => TRUE,
+			    '#collapsed' => FALSE,
+			  );
+			
+			  $form['group_right_column']['group_billede2'] = array(
+			    '#type' => 'fieldset',
+			    '#title' => t('Billede/tekst 2'),
+			    '#weight' => 2,
+			    '#collapsible' => TRUE,
+			    '#collapsed' => TRUE,
+			  );
+			  
+			  $form['group_right_column']['group_billede3'] = array(
+			    '#type' => 'fieldset',
+			    '#title' => t('Billede/tekst 3'),
+			    '#weight' => 3,
+			    '#collapsible' => TRUE,
+			    '#collapsed' => TRUE,
+			  );
+			  
+			  $form['group_right_column']['group_billede4'] = array(
+			    '#type' => 'fieldset',
+			    '#title' => t('Billede/tekst 4'),
+			    '#weight' => 4,
+			    '#collapsible' => TRUE,
+			    '#collapsed' => TRUE,
+			  );
+			  
+			  $form['group_right_column']['group_billede5'] = array(
+			    '#type' => 'fieldset',
+			    '#title' => t('Billede/tekst 5'),
+			    '#weight' => 5,
+			    '#collapsible' => TRUE,
+			    '#collapsed' => TRUE,
+			  );
+			  
+			  $form['group_right_column']['group_billede1']['field_billede1'] = $form['group_right_column']['field_billede1'];
+			  $form['group_right_column']['group_billede1']['field_billede_tekst1'] = $form['group_right_column']['field_billede_tekst1'];
+				$form['group_right_column']['group_billede1']['field_textarea1'] = $form['field_textarea1'];
+			  $form['group_right_column']['field_billede1']['#type'] = 'hidden';
+			  $form['group_right_column']['field_billede1']['#weight'] = -1;
+			  unset($form['field_textarea1']);
+			  unset($form['group_right_column']['field_billede_tekst1']);
+
+			  
+			  $form['group_right_column']['group_billede2']['field_billede2'] = $form['group_right_column']['field_billede2'];
+			  $form['group_right_column']['group_billede2']['field_billede_tekst2'] = $form['group_right_column']['field_billede_tekst2'];
+			  $form['group_right_column']['group_billede2']['field_textarea2'] = $form['field_textarea2'];
+			  $form['group_right_column']['field_billede2']['#type'] = 'hidden';
+			  $form['group_right_column']['field_billede2']['#weight'] = -1;
+			  unset($form['field_textarea2']);
+			  unset($form['group_right_column']['field_billede_tekst2']);
+
+			  
+			  $form['group_right_column']['group_billede3']['field_billede3'] = $form['group_right_column']['field_billede3'];
+			  $form['group_right_column']['group_billede3']['field_billede_tekst3'] = $form['group_right_column']['field_billede_tekst3'];
+			  $form['group_right_column']['group_billede3']['field_textarea3'] = $form['field_textarea3'];
+			  $form['group_right_column']['field_billede3']['#type'] = 'hidden';
+			  $form['group_right_column']['field_billede3']['#weight'] = -1;
+			  unset($form['field_textarea3']);
+			  unset($form['group_right_column']['field_billede_tekst3']);
+
+			  
+			  $form['group_right_column']['group_billede4']['field_billede4'] = $form['group_right_column']['field_billede4'];
+			  $form['group_right_column']['group_billede4']['field_billede_tekst4'] = $form['group_right_column']['field_billede_tekst4'];
+			  $form['group_right_column']['group_billede4']['field_textarea4'] = $form['field_textarea4'];
+			  $form['group_right_column']['field_billede4']['#type'] = 'hidden';
+			  $form['group_right_column']['field_billede4']['#weight'] = -1;
+			  unset($form['field_textarea4']);
+			  unset($form['group_right_column']['field_billede_tekst4']);
+
+			  
+			  $form['group_right_column']['group_billede5']['field_billede5'] = $form['group_right_column']['field_billede5'];
+			  $form['group_right_column']['group_billede5']['field_billede_tekst5'] = $form['group_right_column']['field_billede_tekst5'];
+			  $form['group_right_column']['group_billede4']['field_textarea4'] = $form['field_textarea4'];
+			  $form['group_right_column']['field_billede5']['#type'] = 'hidden';
+			  $form['group_right_column']['field_billede5']['#weight'] = -1;
+			  unset($form['field_textarea5']);
+			  unset($form['group_right_column']['field_billede_tekst5']); 
+	      break;
+*/

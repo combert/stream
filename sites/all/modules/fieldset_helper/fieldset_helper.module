@@ -1,0 +1,641 @@
+<?php
+
+/**
+ *
+ * @file
+ * Saves the collapsed state of a Drupal collapsible fieldset.
+ *
+ * Besides saving the state of collapsible fieldsets this module improves
+ * the usability of Drupal's main module page (admin/build/modules) by adding
+ * expand and collapse all links to top of the page.
+ *
+ *
+ * Notes:
+ *
+ * - Fieldset ids are generated based on the FAPI form's associated array
+ *   keys or the id is generated from the fieldset's title.
+ *
+ * - All generated fieldset ids will be pre-pended with 'fieldset-'.
+ *
+ * - All collapsible fieldsets should be generated using theme('fieldset', $element);
+ *   but you can also use static HTML. (See README.txt)
+ *
+ *
+ * Fieldset helper state manager:
+ *
+ * - The 'state manager' stores the state of all collapsible fieldsets in a
+ *   cookie.
+ *
+ * - The state manager dramatically reduces the cookie's size, by converting the
+ *   fieldset's element #id and its related path to an auto incremented numeric id.
+ *
+ * - The state management is controlled by the fieldset_helper_state_manager
+ *   PHP functions and the FieldsetHelperStateManager JavaScript object which
+ *   isolates the API so that it can copied, renamed, and re-used.
+ *
+ *
+ * Related discussions
+ * - @link http://drupal.org/node/114130 Is it possible to get Fieldset Collapsed/Collapsible to remember settings? @endlink
+ * - @link http://drupal.org/node/209006 would be nice to save/show fieldset states @endlink
+ * - @link http://drupal.org/node/198529 In modules listing: collapse fieldsets @endlink
+ * - @link http://drupal.org/node/49103 Give fieldsets an id @endlink
+ * - @link http://drupal.org/node/118343 Adding a collapsible fieldset to your nodes @endlink
+ * - @link http://drupal.org/node/321779 Use Drupal JS Libraries : Your own collapsible fieldset @endlink
+ *
+ * Similar modules
+ * - @link http://drupal.org/project/autosave Autosave @endlink
+ * - @link http://drupal.org/project/util Utility @endlink
+ */
+
+////////////////////////////////////////////////////////////////////////////////
+// Hooks
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implementation of hook_perm().
+ */
+function fieldset_helper_perm() {
+  return array('save fieldset state');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function fieldset_helper_menu() {
+  $items['admin/settings/fieldset_helper'] = array(
+    'title' => 'Fieldset helper',
+    'description' =>  'Settings to save FAPI collapsible fieldset state',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fieldset_helper_admin_settings'),
+    'file' => 'fieldset_helper.admin.inc',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['admin/settings/fieldset_helper/view'] = array(
+    'title' => 'Settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  ) + $items['admin/settings/fieldset_helper'];
+
+  $items['admin/settings/fieldset_helper/test'] = array(
+    'title' => 'Test',
+    'description' =>  'Test page for saving FAPI collapsible fieldset state',
+    'page callback' => 'fieldset_helper_test',
+    'file' => 'fieldset_helper.admin.inc',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function fieldset_helper_form_alter(&$form, $form_state, $form_id) {
+  // If the $form object has an id, which will be used in the <form> tag,
+  // then replace the $form_id variable.
+  $form_id = ( isset($form['#id']) ) ? $form['#id'] : $form_id;
+
+  _fieldset_helper_set_fieldset_ids_recursive($form, $form_id);
+}
+
+/**
+ * Implementation of hook_fieldset_helper_path_alter().
+ */
+function fieldset_helper_fieldset_helper_path_alter(&$path) {
+  // Force all node form (add and edit) fieldsets to share their state.
+  if (variable_get('fieldset_helper_node_form_state', 1) == 1) {
+    if (preg_match('#^(node/[^/]+/edit|node/add/[^/]+)$#', $path)) {
+      $path = 'node/form';
+    }
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Theme functions
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implementation of hook_theme().
+ */
+function fieldset_helper_theme() {
+  return array(
+    'fieldset_helper_toggle_all' => array(
+      'arguments' => array('selector' => NULL),
+    ),
+  );
+}
+
+/**
+ * Theme 'Expand all | Collapse all' links that toggle a page or selected fieldsets
+ * state.
+ *
+ * @param  $selector
+ *   A jQuery selector that restricts what fieldset will be toggle by link.
+ * @return
+ *   HTML output
+ */
+function theme_fieldset_helper_toggle_all($selector = NULL) {
+  if (!user_access('save fieldset state')) {
+    return '';
+  }
+
+  // Wrap selector string in single quotes
+  if ($selector != NULL) {
+    $selector = "'". $selector ."'";
+  }
+
+  $output = '<div class="fieldset-helper-toggle-all">';
+  $output .= '<a href="javascript:Drupal.FieldsetHelper.expandFieldsets('. $selector .');">'. t('Expand all') .'</a>';
+  $output .= ' | ';
+  $output .= '<a href="javascript:Drupal.FieldsetHelper.collapseFieldsets('. $selector .');">'. t('Collapse all') .'</a>';
+  $output .= '</div>';
+  $output .= '<div class="clear-block"></div>';
+  return $output;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Theme preprocess functions
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implementation of hook_preprocess_page().
+ */
+function fieldset_helper_preprocess_page(&$variables) {
+  // Make sure the user can save a fieldset's state
+  if (!user_access('save fieldset state')) {
+    return;
+  }
+  global $theme;
+
+  // Count the number of collapsible fieldsets.
+  $number_of_collapsible_fieldsets = 0;
+  $region_list = system_region_list($theme);
+  $region_list['content'] = TRUE; // Make sure 'content' is added to the region list.
+  $regions = array_keys($region_list);
+  foreach ($regions as $region) {
+    // Using stripos() since it is much faster then executing preg_match() on every region.
+    // Still use preg_match to confirm and count the number of collapsible fieldsets.
+    if ( stripos($variables[$region], '<fieldset') !== FALSE && $count = preg_match_all('/<fieldset[^>]+class="[^"]*collapsible/', $variables[$region], $matches)) {
+      $number_of_collapsible_fieldsets += $count;
+    }
+  }
+
+  // Add fieldset_helper.js and related js files and settings
+  if ($number_of_collapsible_fieldsets > 0) {
+    // Tao theme theme override theme_fieldset and it uses tao.js to handle collapsible fieldsets.
+    if (stripos($variables['scripts'], 'tao.js') === FALSE) {
+      drupal_add_js('misc/collapse.js', 'core');
+    }
+    drupal_add_js( drupal_get_path('module', 'fieldset_helper') .'/fieldset_helper.js');
+
+    // Add ids and cookie duration.
+    $settings['fieldset_helper_state_manager'] = array(
+      'ids' => fieldset_helper_state_manager_get_lookup_id(),
+      'cookie_duration' => variable_get('fieldset_helper_cookie_duration', 0),
+    );
+    drupal_add_js($settings, 'setting');
+
+    // Reset scripts
+    $variables['scripts'] = drupal_get_js();
+  }
+
+  // Add toggle all.
+  $minimum = variable_get('fieldset_helper_toggle_all_minimum', 2);
+  if ($number_of_collapsible_fieldsets >= $minimum) {
+    $pages = variable_get('fieldset_helper_toggle_all_pages', 'admin/build/modules
+admin/build/modules/list');
+    if (!empty($pages) && (trim($pages) == '*' || drupal_match_path($_GET['q'], $pages))) {
+      $variables['content'] = fieldset_helper_toggle_all_output() . $variables['content'];
+    }
+  }
+}
+
+
+// Below preprocess function are only executed if the theme implementation for
+// fieldset and fieldgroup are changed from function to a template.
+// For example, the tao.theme declares a fieldset.tpl.php.
+
+/**
+ * Implementation of hook_preprocess_fieldset().
+ */
+function fieldset_helper_preprocess_fieldset(&$variables) {
+  fieldset_helper_alter_theme_fieldset($variables['element']);
+}
+
+/**
+ * Implementation of hook_preprocess_fieldgroup().
+ */
+function fieldset_helper_preprocess_fieldgroup(&$variables) {
+  fieldset_helper_alter_theme_fieldset($variables['element']);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Custom theme preprocess functions
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implementation of hook_theme_registry_alter(). Defines fieldset and fieldgroup theme preprocess functions.
+ *
+ * "Preprocess functions only apply to theming hooks implemented as templates.
+ * The main role of the preprocessor is to setup variables to be placed within
+ * the template (.tpl.php) files. Plain theme functions do not interact with
+ * preprocessors." -- From @link http://drupal.org/node/223430 Setting up variables for use in a template (preprocess functions) @endlink
+ *
+ * Note: Using *_custom_preprocess instead of *_preprocess because
+ * Drupal 7 adds support for theme function preprocessors.
+ */
+function fieldset_helper_theme_registry_alter(&$theme_registry) {
+  $theme_functions = array('fieldset', 'fieldgroup_fieldset');
+  foreach ($theme_functions as $theme_function) {
+    if (isset($theme_registry[$theme_function]['function'])) {
+      $theme_registry[$theme_function]['original_function'] = $theme_registry[$theme_function]['function'];
+      $theme_registry[$theme_function]['function'] = 'fieldset_helper_'. $theme_function .'_custom_preprocess';
+    }
+  }
+}
+
+/**
+ * Custom handler for theme function that have been hijacked by fieldset_helper_theme_registry_alter().
+ */
+function fieldset_helper_theme_custom($name, $element = NULL) {
+  // Call originally registered theme function.
+  $theme_registry = theme_get_registry();
+  $theme_function = $theme_registry[$name]['original_function'];
+
+  return call_user_func($theme_function, $element);
+}
+
+/**
+ * Get default collapsible attribute for the current path.
+ */
+function fieldset_helper_default_collapsible() {
+  static $default_collapsible;
+  if (isset($default_collapsible)) {
+    return $default_collapsible;
+  }
+
+  $pages = variable_get('fieldset_helper_default_collapsible_pages', '*');
+
+  if (empty($pages)) {
+    $default_collapsible = FALSE;
+  }
+  elseif (trim($pages) == '*') {
+    $default_collapsible = TRUE;
+  }
+  else {
+    $default_collapsible = drupal_match_path($_GET['q'], $pages);
+  }
+
+  return $default_collapsible;
+}
+
+/**
+ * Get default collapsed state for the current page.
+ */
+function fieldset_helper_default_collapsed() {
+  static $default_collapsed;
+  if (isset($default_collapsed)) {
+    return $default_collapsed;
+  }
+
+  $pages = variable_get('fieldset_helper_default_collapsed_pages', 'admin/build/modules');
+
+  if (empty($pages)) {
+    $default_collapsed = FALSE;
+  }
+  elseif (trim($pages) == '*') {
+    $default_collapsed = TRUE;
+  }
+  else {
+    $default_collapsed = drupal_match_path($_GET['q'], $pages);
+  }
+
+  return $default_collapsed;
+}
+
+/**
+ * Implementation of hook_theme_custom_preprocess().
+ */
+function fieldset_helper_fieldset_custom_preprocess($element) {
+  fieldset_helper_alter_theme_fieldset($element);
+  return fieldset_helper_theme_custom('fieldset', $element);
+}
+
+/**
+ * Implementation of hook_theme_custom_preprocess().
+ */
+function fieldset_helper_fieldgroup_fieldset_custom_preprocess($element) {
+  fieldset_helper_alter_theme_fieldset($element);
+  return fieldset_helper_theme_custom('fieldgroup_fieldset', $element);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// General and utility functions
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Output toggle all fieldsets link.
+ */
+function fieldset_helper_toggle_all_output() {
+  global $theme;
+
+  if (strpos($_GET['q'], 'admin/build/modules') === 0) {
+    $toggle_all_selectors = array(
+      'rubik' => '#system-modules div.column-wrapper > fieldset.collapsible',
+      'default' => '#system-modules > div > fieldset.collapsible',
+    );
+    $toggle_all_selector = $toggle_all_selectors[$theme] ? $toggle_all_selectors[$theme] : $toggle_all_selectors['default'];
+  }
+  else {
+    $toggle_all_selector = '';
+  }
+
+  return theme('fieldset_helper_toggle_all', $toggle_all_selector);
+}
+
+/**
+ * Alters a fieldset element to set default attributes, state, and id.
+ *
+ * @param &$element
+ *   A FAPI fieldset element.
+ */
+function fieldset_helper_alter_theme_fieldset(&$element) {
+  // Make sure each fieldset element is only altered once.
+  if ( isset($element['#fieldset_helper_processed']) ) {
+    return;
+  }
+
+  // Set id for fieldsets without them.
+  if ( empty($element['#attributes']['id']) ) {
+    // Fieldsets without titles can not have an id automatically generated.
+    if (empty($element['#title'])) {
+      return $element;
+    }
+    else {
+      if ( isset($element['#attributes']['class']) && preg_match('/group-[-_a-zA-Z]+/', $element['#attributes']['class'], $matches)) {
+        $element['#attributes']['id'] = _fieldset_helper_format_id('fieldset-'. $matches[0]);
+      }
+      else {
+        $element['#attributes']['id'] = _fieldset_helper_format_id('fieldset-'. $element['#title']);
+      }
+    }
+  }
+
+  // If fieldset has no classes, add its id as a class.
+  // This is extremely useful for styling input format fieldsets.
+  if (empty($element['#attributes']['class'])) {
+    // Remove form_clean_id incrementing for id.
+    $class_name = preg_replace('/-\d+$/', '', $element['#attributes']['id']);
+    $element['#attributes']['class'] = $class_name;
+  }
+
+  // See if all fieldset are collapsible.
+  if ($default_collapsible = fieldset_helper_default_collapsible()) {
+    $element['#collapsible'] = $default_collapsible;
+  }
+
+  // Set fieldset's default collapsed state
+  $element['#collapsed'] = ( isset($element['#collapsed']) ) ? $element['#collapsed'] : FALSE;
+  if ($default_collapsed = fieldset_helper_default_collapsed()) {
+    $element['#collapsed'] = $default_collapsed;
+  }
+
+  // Set fieldset state
+  if (user_access('save fieldset state')) {
+    $element['#collapsed'] = fieldset_helper_state_manager_get_state($element['#attributes']['id'], $element['#collapsed']);
+  }
+
+  // Alter fieldset element.
+  drupal_alter('fieldset', $element);
+
+  $element['#fieldset_helper_processed'] = TRUE;
+}
+
+/**
+ * Recursively set a fieldset ids based on the associated array keys.
+ *
+ * All fieldset id's will begin with 'fieldset-' to insure their uniqueness.
+ *
+ * @param &$form
+ *   Nested array of form elements that comprise the form.
+ * @param $form_id
+ *   String representing the id of the form.
+ * @param $id
+ *   Based id for fieldsets.
+ */
+function _fieldset_helper_set_fieldset_ids_recursive(&$form, $form_id, $id='fieldset') {
+  foreach ($form as $key => $value) {
+    // If $key is a property (begins with a hash (#) then continue.
+    if (strpos($key, '#') === 0) {
+      continue;
+    }
+
+    // If this element has no type or it is not a fieldset then continue.
+    if (!isset($form[$key]['#type']) || $form[$key]['#type'] != 'fieldset') {
+      continue;
+    }
+
+    // Add key, as valid DOM id, to fieldset id.
+    $fieldset_id = _fieldset_helper_format_id($id .'-'. $key);
+
+    // Add id to the collapsible fieldset if an id is not defined.
+    if (!isset($form[$key]['#attributes']['id'])) {
+      $form[$key]['#attributes']['id'] = $fieldset_id;
+    }
+
+    // Recurse downward
+    _fieldset_helper_set_fieldset_ids_recursive($form[$key], $form_id, $fieldset_id);
+  }
+}
+
+/**
+ * Formats any string as a valid fieldset id.
+ *
+ * @param $text
+ *   A string to be converted to a valid fieldset id.
+ *
+ * @return
+ *   The string format as a fieldset id.
+ */
+function _fieldset_helper_format_id($text) {
+  return form_clean_id(preg_replace('/[^a-z0-9]+/', '-', drupal_strtolower($text)));
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// State manager functions.
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Check if a path matches any pattern in a set of patterns.
+ *
+ * @return
+ *   The path to save current page's element to.
+ */
+function fieldset_helper_state_manager_get_path() {
+  static $path;
+
+  if (isset($path)) {
+    return $path;
+  }
+
+  $path = $_GET['q'];
+
+  if ($pages = variable_get('fieldset_helper_global_pages', '')) {
+    $pages = preg_split('/\s+/', $pages);
+    foreach ($pages as $page) {
+      $pattern = '/^'. str_replace('\*', '.*', preg_quote($page, '/') ) .'$/';
+      if (preg_match($pattern, $path)) {
+        $path = $page;
+        break;
+      }
+    }
+  }
+
+  // Run all hook implementations for hook_fieldset_helper_path_alter().
+  foreach (module_implements('fieldset_helper_path_alter') as $module) {
+    $function = $module .'_fieldset_helper_path_alter';
+    $function($path);
+  }
+
+  return $path;
+}
+
+/**
+ * Check if a fieldset id matches any global id patterns.
+ *
+ * @param $element_id
+ *   The DOM element id.
+ * @param $path
+ *   Default path if no match is found.
+ * @return
+ *   The elements path (*, $_GET['q'], or custom).
+ */
+function fieldset_helper_state_manager_get_element_path($element_id, $path) {
+  static $global_patterns;
+
+  if (!isset($global_patterns )) {
+    $global_ids = variable_get('fieldset_helper_global_ids', '');
+    $global_patterns = '/^('. preg_replace(array('/(\r\n?|\n)/', '/\\\\\*/'), array('|', '.*'), preg_quote($global_ids, '/')) .')$/';
+  }
+
+  $path = preg_match($global_patterns, $element_id) ? '*' : $path;
+
+  // Run all hook implementations for hook_fieldset_helper_element_path_alter().
+  foreach (module_implements('fieldset_helper_element_path_alter') as $module) {
+    $function = $module .'_fieldset_helper_element_path_alter';
+    $function($element_id, $path);
+  }
+
+  return $path;
+}
+
+/**
+ * Get the lookup id for the $element_id in the current path.
+ *
+ * @param $element_id
+ *   The DOM element id.
+ * @return
+ *   The numeric auto generated look up id for the $element_id. If $element_id
+ *   is not set then the entire lookup id table for the current page will returned.
+ */
+function fieldset_helper_state_manager_get_lookup_id($element_id = NULL) {
+  static $lookup_id_table;
+
+  $path = fieldset_helper_state_manager_get_path();
+
+  // Load existing lookup ids for the current path from the database.
+  if (!isset($lookup_id_table)) {
+    // Fetch lookup records for the current path. Use sorting to make sure global path (*) are last.
+    $query = "SELECT id, element_id FROM {fieldset_helper_state_manager} WHERE path='%s' OR path='*' ORDER BY path DESC ";
+    $result = db_query($query, $path);
+    while ($data = db_fetch_array($result)) {
+      $lookup_id_table[ $data['element_id'] ] = $data['id'];
+    }
+  }
+
+  // Create a new lookup id for element_id's not associated with the lookup id table.
+  if ( $element_id != NULL && !isset($lookup_id_table[$element_id]) ) {
+    // Get element path.
+    $element_path = fieldset_helper_state_manager_get_element_path($element_id, $path);
+
+    // Get id for path and element_id combination.
+    $sql = "INSERT INTO {fieldset_helper_state_manager} (path, element_id) VALUES ('%s', '%s')";
+    db_query($sql, $element_path, $element_id);
+    $lookup_id = db_last_insert_id('fieldset_helper_state_manager', 'id');
+    $lookup_id_table[$element_id] = $lookup_id;
+  }
+
+  // Return the look up id for the element id.
+  return ($element_id == NULL) ? $lookup_id_table : $lookup_id_table[$element_id];
+}
+
+/**
+ * Clear all the store lookup id for every form.
+ */
+function fieldset_helper_state_manager_clear_lookup_ids() {
+  drupal_set_message(t('Fieldset lookup ids cleared.'));
+  db_query("DELETE FROM {fieldset_helper_state_manager}");
+}
+
+/**
+ * Get an associated array for lookup id and the element's state (1 or 0) from $_COOKIE['fieldset_helper_state_manager'].
+ *
+ * @param $clear
+ *   Optional boolean when set to TRUE will clear any cached cookie states.
+ */
+function fieldset_helper_state_manager_get_cookie_states($clear = FALSE) {
+  static $states;
+
+  if (isset($states) && $clear == FALSE) {
+    return $states;
+  }
+
+  $states = array();
+
+  if (!isset($_COOKIE['fieldset_helper_state_manager'])) {
+    return $states;
+  }
+  else {
+    $values = explode('_', $_COOKIE['fieldset_helper_state_manager']);
+    foreach ($values as $value) {
+      $params = explode('.', $value);
+      $states[ $params[0] ] = ($params[1] == '1') ? TRUE : FALSE ;
+    }
+    return $states;
+  }
+}
+
+/**
+ * Get fieldset's collapsed state.
+ *
+ * @param $element_id
+ *   The DOM element id.
+ * @param $default_value
+ *   Boolean for default state value
+ */
+function fieldset_helper_state_manager_get_state($element_id, $default_value = FALSE) {
+  // Always return the default value is state management is disabled for anonymous.
+  if (user_is_anonymous() && variable_get('fieldset_helper_disable_state_anonymous', 0) == 1) {
+    return $default_value;
+  }
+
+  // Get fieldset states and lookup ids
+  $states = fieldset_helper_state_manager_get_cookie_states();
+  $lookup_id = fieldset_helper_state_manager_get_lookup_id($element_id);
+
+  // Return collapsed boolean value.
+  if ( isset($states[$lookup_id])) {
+    return ($states[$lookup_id]) ? TRUE : FALSE;
+  }
+  else {
+    return ($default_value) ? TRUE : FALSE;
+  }
+}
